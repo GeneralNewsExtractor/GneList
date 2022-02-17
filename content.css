@@ -1,0 +1,42 @@
+.seleted-element-highlight {
+    outline: 2px solid #C70000 !important;
+    background-color: rgba(213, 0, 0, 0.2) !important;
+	background: rgba(213, 0, 0, 0.2) !important;
+}
+
+.seleted-element-highlight * {
+    background-color: rgba(213, 0, 0, 0.2) !important;
+	background: rgba(213, 0, 0, 0.2) !important;
+}
+
+.hovered-element-highlight {
+    outline: 2px solid green !important;
+    background-color: rgba(0, 213, 0, 0.20) !important;
+	background: rgba(0, 213, 0, 0.20) !important;
+}
+
+.hovered-element-highlight * {
+    background-color: rgba(0, 213, 0, 0.20) !important;
+	background: rgba(0, 213, 0, 0.20) !important;
+}
+
+.select-tool-bar{
+    z-index:99999;
+    position: fixed;
+    left:10px;
+    bottom:20px;
+    width: 100%;
+    background-color: #FFF;
+}
+
+.select-tool-bar button{
+    color: #ffffff !important;
+	-webkit-text-fill-color: #FFF !important;
+	background-color: #3276b1 !important;
+	cursor: pointer !important;
+	width:130px !important;
+}
+
+.select-tool-bar input {
+width: 80%;
+}

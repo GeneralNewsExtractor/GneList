@@ -1,0 +1,29 @@
+{
+    "name": "GneList",
+    "description": "为GNE快速抓取列表页！",
+    "version": "0.1",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "activeTab", "scripting", "tabs"
+    ],
+    "host_permissions": [
+        "*://*/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": [
+                "CssSelector.js",
+                "css_to_xpath.js",
+                "content.js"
+            ],
+            "css": ["content.css"]
+        }
+    ]
+}
