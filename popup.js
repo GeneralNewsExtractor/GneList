@@ -1,5 +1,5 @@
 let start = document.getElementById('start')
-let rule_name = document.getElemenetById('rule_name')
+let rule_name = document.getElementById('rule_name')
 start.addEventListener('click', function() {
     console.log('start to capture')
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
