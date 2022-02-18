@@ -42,6 +42,8 @@ chrome.runtime.onMessage.addListener(
         var body = {
             url: url,
             xpath: xpath,
+            name: request.name
         }
+        post_data_to_backend(body)
     }
 )

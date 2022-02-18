@@ -5,6 +5,7 @@ var skip_class = ['select-tool-bar',
                   'done-select',
                   'show-select-xpath',
                   'select-parent']
+var rule_name = ''
 var CssSelector = window.CssSelector
 var selected_elements = []
 var selector = new CssSelector({
@@ -23,6 +24,7 @@ chrome.runtime.onMessage.addListener(
             "from the extension");
         if (request.command === 'trigger') {
             console.log('receive command to trigger...')
+            rule_name = request.name
             start_to_find_xpath()
         }
         if (request.command === 'close') {
@@ -145,7 +147,7 @@ function choose_element(event) {
     console.log('the merged selector is :', xpath)
     var input = document.querySelector('.show-select-xpath')
     input.value = result
-    send_message_to_background({from: 'picker', 'message': xpath})
+    send_message_to_background({from: 'picker', 'message': xpath, 'name': rule_name})
 }
 
 function start_to_find_xpath(){
