@@ -1,3 +1,4 @@
+let backend = 'http://127.0.0.1:8800/rule'
 function trigger_picker(message) {
     chrome.tabs.sendMessage(message.tabId, {command: 'trigger'})
 }
@@ -15,13 +16,19 @@ function post_data_to_backend(msg) {
         },
         body: JSON.stringify({data: msg})
     }
-    fetch('http://127.0.0.1:8800/rule', options)
+    chrome.storage.sync.get('backend_address', ({backend_address}) => {
+        if (backend_address) {
+            backend = backend_address
+        }
+        console.log('send data to backend: ' + backend)
+        fetch(backend, options)
          .then(response => response.json())
          .then(response => {
              console.log(response)
          }).catch((err) => {
              console.log('xxxx', err)
          })
+    })
 }
 
 chrome.runtime.onMessage.addListener(

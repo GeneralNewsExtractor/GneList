@@ -132,6 +132,7 @@ function choose_element(event) {
     if (selected_elements.length === 0) {
         selected_elements.push(element)
         result = selector.getCssSelector([element])
+        console.log('第一个元素选中：', result)
     } else {
         // selected_elements里面已经有一个节点了，那么
         // 要考虑现在是不是在点击列表页的连续两项，如果是，

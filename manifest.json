@@ -10,7 +10,7 @@
         "default_popup": "popup.html"
     },
     "permissions": [
-        "activeTab", "scripting", "tabs"
+        "activeTab", "scripting", "tabs", "storage"
     ],
     "host_permissions": [
         "*://*/*"
@@ -25,5 +25,6 @@
             ],
             "css": ["content.css"]
         }
-    ]
+    ],
+    "options_page": "options.html"
 }
