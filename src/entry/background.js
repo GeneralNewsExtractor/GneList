@@ -1,11 +1,4 @@
 let backend = 'http://127.0.0.1:8800/rule'
-function trigger_picker(message) {
-    chrome.tabs.sendMessage(message.tabId, {command: 'trigger'})
-}
-
-function close_picker(message) {
-    chrome.tabs.sendMessage(message.tabId, {command: 'close'})
-}
 
 function post_data_to_backend(msg) {
     var options = {

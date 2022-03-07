@@ -1,7 +1,24 @@
-## GneList
+# gne-list
 
-A chrome extension to get XPath of list items in webpage easily.
+## Project setup
+```
+yarn install
+```
 
-Still in developping, please wait a moment.
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
 
+### Compiles and minifies for production
+```
+yarn build
+```
 
+### Lints and fixes files
+```
+yarn lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

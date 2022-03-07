@@ -4,7 +4,9 @@ console.log('start to inject content js')
 var skip_class = ['select-tool-bar',
                   'done-select',
                   'show-select-xpath',
-                  'select-parent']
+                  'select-parent',
+                  'extract_data'
+                ]
 var rule_name = ''
 var CssSelector = window.CssSelector
 var selected_elements = []
@@ -16,6 +18,8 @@ var selector = new CssSelector({
     ignoredClasses: skip_class
 })
 var top = 0
+var css_selector_result = ''
+var xpath_result = ''
 
 chrome.runtime.onMessage.addListener(
     function(request, sender) {
@@ -144,11 +148,12 @@ function choose_element(event) {
         }
     }
     highlight_selected(result)
+    css_selector_result = result
     var xpath = window.cssxpath(result)
     console.log('the merged selector is :', xpath)
+    xpath_result = xpath 
     var input = document.querySelector('.show-select-xpath')
     input.value = result
-    send_message_to_background({from: 'picker', 'message': xpath, 'name': rule_name})
 }
 
 function start_to_find_xpath(){
@@ -160,7 +165,7 @@ function start_to_find_xpath(){
     window.onmousedown = choose_element
 }
 
-function stop_finding_xpath() {
+function stop_finding_xpath() {    
     remove_highlight('selected')
     remove_highlight('hover')
     window.onmousedown = null
@@ -172,7 +177,8 @@ function get_parent_element(element) {
     return element.parentNode
 }
 
-function remove_toolbar() {
+function select_done() {
+    send_message_to_background({from: 'picker', 'message': xpath_result, 'name': rule_name})
     stop_finding_xpath()
     var body = document.getElementsByTagName('body')[0]
     var done = document.querySelector('.select-tool-bar')
@@ -183,12 +189,28 @@ function select_parent() {
     top--
 }
 
+function get_extracted_data() {
+    var elements = document.querySelectorAll(css_selector_result)
+    console.log('>>>', css_selector_result, elements)
+    var extract_result = []
+    elements.forEach((row) => {
+        var tag = row.tagName.toLowerCase()
+        var inner_text = row.innerText
+        var url = row.href
+        console.log(tag, url, inner_text)
+        extract_result.push({'tag': tag, text: inner_text, url: url})
+    })
+    alert(JSON.stringify(extract_result))
+
+    
+}
+
 function add_corner_button() {
     //在网页左下角添加一个按钮，用来细化picker的红框
     var done = document.createElement('button')
     var text = document.createTextNode('Done')
     done.appendChild(text)
-    done.onclick = remove_toolbar
+    done.onclick = select_done
     done.setAttribute('class', 'done-select')
 
     var input = document.createElement('input')
@@ -200,10 +222,17 @@ function add_corner_button() {
     parent.setAttribute('class', 'select-parent')
     parent.onclick = select_parent
 
+    var extract_data = document.createElement('button')
+    extract_data.setAttribute('class', 'extract_data')
+
+    extract_data.appendChild(document.createTextNode('E'))
+    extract_data.onclick = get_extracted_data
+
     var div = document.createElement('div')
     div.appendChild(input)
     div.appendChild(parent)
     div.appendChild(done)
+    div.appendChild(extract_data)
     div.setAttribute('class', 'select-tool-bar')
     var body = document.getElementsByTagName('body')[0]
     body.appendChild(div)
