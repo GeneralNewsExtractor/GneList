@@ -5,14 +5,10 @@
 yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
 ### Compiles and minifies for production
+
 ```
-yarn build
+npm run build
 ```
 
 ### Lints and fixes files
@@ -20,5 +16,6 @@ yarn build
 yarn lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Use
+
+Load the dist from chrome extension.
