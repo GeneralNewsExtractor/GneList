@@ -5,9 +5,11 @@ var skip_class = ['select-tool-bar',
                   'done-select',
                   'show-select-xpath',
                   'select-parent',
-                  'extract_data'
+                  'extract_data',
+                  'cancel-select'
                 ]
 var rule_name = ''
+var dedup = false // 是否根据 rule_name去重
 var CssSelector = window.CssSelector
 var selected_elements = []
 var selector = new CssSelector({
@@ -27,8 +29,9 @@ chrome.runtime.onMessage.addListener(
             "from a content script:" + sender.tab.url :
             "from the extension");
         if (request.command === 'trigger') {
-            console.log('receive command to trigger...')
+            console.log('receive command to trigger...', request)
             rule_name = request.name
+            dedup = request.dedup
             start_to_find_xpath()
         }
         if (request.command === 'close') {
@@ -171,6 +174,9 @@ function stop_finding_xpath() {
     window.onmousedown = null
     window.onmousemove = null
     enable_a_link()
+    var body = document.getElementsByTagName('body')[0]
+    var done = document.querySelector('.select-tool-bar')
+    body.removeChild(done)
 }
 
 function get_parent_element(element) {
@@ -178,11 +184,11 @@ function get_parent_element(element) {
 }
 
 function select_done() {
-    send_message_to_background({from: 'picker', 'message': xpath_result, 'name': rule_name})
+    var msg_to_background = {from: 'picker', 'message': xpath_result, 'name': rule_name, 'dedup': dedup}
+    console.log('msg_to_background:', msg_to_background)
+    send_message_to_background(msg_to_background)
     stop_finding_xpath()
-    var body = document.getElementsByTagName('body')[0]
-    var done = document.querySelector('.select-tool-bar')
-    body.removeChild(done)
+    
 }
 
 function select_parent() {
@@ -208,7 +214,7 @@ function get_extracted_data() {
 function add_corner_button() {
     //在网页左下角添加一个按钮，用来细化picker的红框
     var done = document.createElement('button')
-    var text = document.createTextNode('Done')
+    var text = document.createTextNode('提交')
     done.appendChild(text)
     done.onclick = select_done
     done.setAttribute('class', 'done-select')
@@ -217,20 +223,24 @@ function add_corner_button() {
     input.setAttribute('class', 'show-select-xpath')
     input.setAttribute('type', 'text')
 
-    var parent = document.createElement('button')
-    parent.appendChild(document.createTextNode('P'))
-    parent.setAttribute('class', 'select-parent')
-    parent.onclick = select_parent
+    // var parent = document.createElement('button')
+    // parent.appendChild(document.createTextNode('P'))
+    // parent.setAttribute('class', 'select-parent')
+    // parent.onclick = select_parent
+
+    var cancel = document.createElement('button')
+    cancel.appendChild(document.createTextNode('取消'))
+    cancel.setAttribute('class', 'cancel-select')
+    cancel.onclick = stop_finding_xpath
 
     var extract_data = document.createElement('button')
     extract_data.setAttribute('class', 'extract_data')
-
-    extract_data.appendChild(document.createTextNode('E'))
+    extract_data.appendChild(document.createTextNode('测试'))
     extract_data.onclick = get_extracted_data
 
     var div = document.createElement('div')
     div.appendChild(input)
-    div.appendChild(parent)
+    div.appendChild(cancel)
     div.appendChild(done)
     div.appendChild(extract_data)
     div.setAttribute('class', 'select-tool-bar')

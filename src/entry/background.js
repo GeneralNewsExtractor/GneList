@@ -42,7 +42,8 @@ chrome.runtime.onMessage.addListener(
         var body = {
             url: url,
             xpath: xpath,
-            name: request.name
+            name: request.name,
+            dedup: request.dedup
         }
         post_data_to_backend(body)
     }
